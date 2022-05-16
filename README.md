@@ -9,8 +9,8 @@ In order to utilize this package, you will first need to create a Spotify develo
   4. Once on the Overiew page for your app, **save your Client ID and Client Secret**
 
 You will also need your Spotify username. You can navigate to find your username through the desktop or mobile applications:
-  Desktop: Click on your profile in the top-right of the page, select Account, your username will be under the Account Overview section
-  Mobile: Got to Settings, click Account, your username will be displayed at the top of the page
+  - Desktop: Click on your profile in the top-right of the page, select Account, your username will be under the Account Overview section
+  - Mobile: Got to Settings, click Account, your username will be displayed at the top of the page
 
 ### Methodology
 
