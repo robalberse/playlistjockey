@@ -25,10 +25,11 @@ def connect_spotify(client_id:str, client_secret:str, spotify_user:str):
     global USER_ID
     USER_ID = spotify_user
     token = spotipy.util.prompt_for_user_token(USER_ID,
-                                        scope='playlist-modify-private,\
+                                               scope='playlist-modify-private,\
                                                playlist-modify-public',
-                                        client_id=client_id, client_secret=client_secret,
-                                        redirect_uri='https://localhost:8000')
+                                               client_id=client_id,
+                                               client_secret=client_secret,
+                                               redirect_uri='https://localhost:8000')
     if token:
         SP = spotipy.Spotify(auth=token, requests_timeout=10)
 
@@ -328,6 +329,30 @@ def bpm_filter(donor_df:pd.DataFrame, recipient_df:pd.DataFrame):
                       (donor_df.bpm<=prev_bpm*1.1)]
     return bpm_df
 
+def energy_filter(donor_df:pd.DataFrame, recipient_df:pd.DataFrame):
+    '''
+    Filter donor_df for songs with similar energy values to the previously
+    added song to the recipient_df.
+
+    Parameters
+    ----------
+    donor_df : pd.DataFrame
+        Songs available to be chosen as the next song.
+    recipient_df : pd.DataFrame
+        Current list and order of songs for the updated playlist.
+
+    Returns
+    -------
+    energy_df : pd.DataFrame
+        List of selectable next songs that have similar energy values to the
+        most recent song from the recipient list.
+
+    '''
+    prev_energy = recipient_df.iloc[-1]['pop_energy']
+    energy_df = donor_df[(donor_df.pop_energy>=prev_energy*0.9) &
+                      (donor_df.pop_energy<=prev_energy*1.1)]
+    return energy_df
+
 def random_select_song(donor_df:pd.DataFrame):
     '''
     Select a random song ID from a playlist DataFrame.
@@ -402,7 +427,8 @@ def dj_select_song(donor_df:pd.DataFrame, recipient_df:pd.DataFrame,
     '''
     prev_artists = artist_filter(donor_df, recipient_df)
     ideal_bpms = bpm_filter(prev_artists, recipient_df)
-    dj_pool = key_filter(ideal_bpms, recipient_df)
+    ideal_energy = energy_filter(ideal_bpms, recipient_df)
+    dj_pool = key_filter(ideal_energy, recipient_df)
     if opt_output is True:
         return dj_pool
     else:
@@ -450,7 +476,8 @@ def opt_dj_select_song(donor_df:pd.DataFrame, recipient_df:pd.DataFrame):
                                                    recipient_df,
                                                    'opt_dj')
     except:
-        pass
+        new_donor_df = donor_df
+        new_recipient_df = recipient_df
     return new_donor_df, new_recipient_df
 
 def key_select_song(donor_df:pd.DataFrame, recipient_df:pd.DataFrame):
@@ -481,7 +508,8 @@ def key_select_song(donor_df:pd.DataFrame, recipient_df:pd.DataFrame):
                                                    recipient_df,
                                                    'key')
     except:
-        pass
+        new_donor_df = donor_df
+        new_recipient_df = recipient_df
     return new_donor_df, new_recipient_df
 
 def bpm_select_song(donor_df:pd.DataFrame, recipient_df:pd.DataFrame):
@@ -512,7 +540,8 @@ def bpm_select_song(donor_df:pd.DataFrame, recipient_df:pd.DataFrame):
                                                    recipient_df,
                                                    'bpm')
     except:
-        pass
+        new_donor_df = donor_df
+        new_recipient_df = recipient_df
     return new_donor_df, new_recipient_df
 
 def dj_playlist_sort(donor_playlist:str):
@@ -533,7 +562,7 @@ def dj_playlist_sort(donor_playlist:str):
         was selected.
 
     '''
-    if isinstance(donor_playlist) == str:
+    if isinstance(donor_playlist, str) is True:
         donor_df = get_playlist_features(donor_playlist)
     else:
         donor_df = donor_playlist
