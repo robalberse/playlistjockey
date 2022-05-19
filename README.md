@@ -19,6 +19,4 @@ This package sorts the songs in your Spotify playlists by applying three essenti
   - **Beat matching:** playing songs with similar speeds and syncing their beats together
   - **Energy levels:** playing songs with identical intensity 
 
-After picking a random song to begin, the dj_spotify algorithm then identifies other songs from your playlist that meet all or most of the above
-strategies. It then selects the next song by identifying which will lead to the most future matches. The algorithm repeats this process until all
-songs are sorted.
+After picking a random song to begin, the dj_spotify algorithm then identifies other songs from your playlist that meet all or most of the above criteria. It then selects the next song by identifying which applicable song will lead to the most future matches. The algorithm repeats this process until all songs are sorted.
