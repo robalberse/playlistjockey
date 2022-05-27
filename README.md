@@ -12,6 +12,10 @@ You will also need your Spotify username. You can navigate to find your username
   - Desktop: Click on your profile in the top-right of the page, select Account, your username will be under the Account Overview section
   - Mobile: Got to Settings, click Account, your username will be displayed at the top of the page
 
+Required packages:
+  - [pandas](https://pandas.pydata.org/) '''pip install pandas'''
+  - [spotipy](https://spotipy.readthedocs.io/en/2.19.0/) '''pip install spotipy'''
+
 ### Methodology
 
 This package sorts the songs in your Spotify playlists by applying three essential DJ strategies: harmonic mixing, beat matching, and energy levels.
