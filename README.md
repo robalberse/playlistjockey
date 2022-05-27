@@ -14,13 +14,9 @@ You will also need your Spotify username. You can navigate to find your username
 
 Required packages:
   - [pandas](https://pandas.pydata.org/) 
-    '''
-    pip install pandas
-    '''
+    'pip install pandas'
   - [spotipy](https://spotipy.readthedocs.io/en/2.19.0/) 
-    '''
-    pip install spotipy
-    '''
+    'pip install spotipy'
 
 ### Methodology
 
