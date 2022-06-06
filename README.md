@@ -2,7 +2,7 @@
 Algorithmically sort your playlists like a DJ.
 
 ### Setup
-In order to utilize this package, you will first need to create a Spotify developer account:
+In order to utilize this module, you will first need to create a Spotify developer account:
   1. Visit https://developer.spotify.com/ and **create a free account**
   2. Once in My Dashboard, click on **Create an App**
   3. Provide a name and description 
@@ -16,8 +16,12 @@ Required packages:
   - [pandas](https://pandas.pydata.org/) ```pip install pandas```
   - [spotipy](https://spotipy.readthedocs.io/en/2.19.0/) ```pip install spotipy```
 
-### Methodology
+### Playback
+When experiencing a playlist that has been sorted by dj_spotify, enable to following suggested Playback settings in Spotify:
+  - Set the **Crossfade** value in between 8 and 12 seconds, allowing the ending of one song to blend into the beginning of the next song
+  - If you're using the mobile app, also enable **Gapless Playback** to ensure no quiet moments occur while a playlist is playing
 
+### Methodology
 This package sorts the songs in your Spotify playlists by applying three essential DJ strategies: harmonic mixing, beat matching, and energy levels.
   - **Harmonic mixing:** playing songs with compatible keys together
   - **Beat matching:** playing songs with similar speeds and syncing their beats together
