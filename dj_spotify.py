@@ -218,7 +218,10 @@ def get_playlist_features(playlist_id:str):
         sys.stdout.write('\rLoaded {}/{} songs     '.format(len(track_features)+1,
                                                             len(song_ids)))
         sys.stdout.flush()
-        track_features.append(get_song_features(i))
+        try:
+            track_features.append(get_song_features(i))
+        except TypeError:
+            pass
     track_features_df = pd.DataFrame(track_features)
     return track_features_df
 
