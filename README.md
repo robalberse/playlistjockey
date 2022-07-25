@@ -13,10 +13,10 @@ You will also need your Spotify username. You can navigate to find your username
   - Mobile: Got to Settings, click Account, your username will be displayed at the top of the page
 
 Required packages:
-  - [pandas](https://pandas.pydata.org/) ```pip install pandas```
-  - [numpy](https://numpy.org/) ```pip install numpy```
-  - [scikit-learn](https://scikit-learn.org/stable/) ```pip install scikit-learn```
-  - [spotipy](https://spotipy.readthedocs.io/en/2.19.0/) ```pip install spotipy```
+  - [pandas](https://pandas.pydata.org/)
+  - [numpy](https://numpy.org/)
+  - [scikit-learn](https://scikit-learn.org/stable/)
+  - [spotipy](https://spotipy.readthedocs.io/en/2.19.0/)
 
 ### Playback
 When experiencing a playlist that has been sorted by dj_spotify, enable to following suggested Playback settings in Spotify:
@@ -24,7 +24,7 @@ When experiencing a playlist that has been sorted by dj_spotify, enable to follo
   - If you're using the mobile app, also enable **Gapless Playback** to ensure no quiet moments occur while a playlist is playing
 
 ### Methodology
-This package sorts the songs in your Spotify playlists by applying three essential DJ strategies: harmonic mixing, beat matching, energy levels, and genres.
+This package sorts the songs in your Spotify playlists by applying four essential DJ strategies: harmonic mixing, beat matching, energy levels, and genres.
   - **Harmonic mixing:** playing songs with compatible keys together
   - **Beat matching:** playing songs with similar speeds and syncing their beats together
   - **Energy levels:** playing songs with identical intensity 
