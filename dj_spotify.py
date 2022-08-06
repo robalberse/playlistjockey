@@ -342,7 +342,7 @@ class DJ_Spotify:
         if opt_output is True:
             output = dj_pool
         else:
-            dj_index = self.opt_select_song(donor_df, dj_pool)
+            dj_index = self.random_select_song(dj_pool)
             output = dj_index
         return output
 
@@ -490,32 +490,38 @@ class DJ_Spotify:
                     select_type = 'dj_optimal'
                     break
                 # Identify an ideal key, bpm and (energy or genre) song
-                next_index = self.three_select_song(donor_df, recipient_df)
+                next_index = self.three_select_song(donor_df, recipient_df,
+                                                    opt_select=False)
                 if next_index is not None:
                     select_type = 'dj_3'
                     break
                 # Identify an ideal key & bpm song
-                next_index = self.two_select_song(donor_df, recipient_df)
+                next_index = self.two_select_song(donor_df, recipient_df,
+                                                  opt_select=False)
                 if next_index is not None:
                     select_type = 'dj_2'
                     break
                 # Identify an ideal harmonic song
-                next_index = self.key_select_song(donor_df, recipient_df)
+                next_index = self.key_select_song(donor_df, recipient_df,
+                                                  opt_select=False)
                 if next_index is not None:
                     select_type = 'key'
                     break
                 # Identify an ideal BPM song
-                next_index = self.bpm_select_song(donor_df, recipient_df)
+                next_index = self.bpm_select_song(donor_df, recipient_df,
+                                                  opt_select=False)
                 if next_index is not None:
                     select_type = 'bpm'
                     break
                 # Identify an ideal energy song
-                next_index = self.energy_select_song(donor_df, recipient_df)
+                next_index = self.energy_select_song(donor_df, recipient_df,
+                                                     opt_select=False)
                 if next_index is not None:
                     select_type = 'energy'
                     break
                 # Identify an ideal genre song
-                next_index = self.genre_select_song(donor_df, recipient_df)
+                next_index = self.genre_select_song(donor_df, recipient_df,
+                                                    opt_select=False)
                 if next_index is not None:
                     select_type = 'genre'
                     break
