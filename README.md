@@ -7,7 +7,8 @@ In order to utilize this module, you will first need to create a Spotify develop
   2. Once in My Dashboard, click on **Create an App**
   3. Provide a name and description 
   4. Once on the Overview page for your app, **save your Client ID and Client Secret**
-  5. Add https://localhost:8000 as a **Redirect URI**
+  5. Add https://localhost:8000 as a **Redirect URI**, you'll be prompted to submit a redirect
+     link to obtain an access token
 
 You will also need your Spotify username. You can navigate to find your username through the desktop or mobile applications:
   - Desktop: Click on your profile in the top-right of the page, select Account, your username will be under the Account Overview section
