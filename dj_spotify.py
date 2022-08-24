@@ -327,7 +327,7 @@ class DJ_Spotify:
         return new_donor_df, new_recipient_df
 
     def dj_select_song(self, donor_df:pd.DataFrame, recipient_df:pd.DataFrame,
-                       opt_output:bool=False):
+                       opt_output:bool=False, opt_select:bool=True):
         '''
         Chooses the next song by finding songs with compatible key, BPM, energy,
         and genre scale values. If multiple songs are identified, choose the
@@ -341,6 +341,9 @@ class DJ_Spotify:
         dj_pool = self.key_filter(ideal_genre, recipient_df)
         if opt_output is True:
             output = dj_pool
+        elif opt_select is True:
+            dj_index = self.opt_select_song(donor_df, dj_pool)
+            output = dj_index
         else:
             dj_index = self.random_select_song(dj_pool)
             output = dj_index
@@ -464,7 +467,7 @@ class DJ_Spotify:
             genre_index = self.random_select_song(genre_pool)
         return genre_index
 
-    def dj_playlist_sort(self, donor_playlist:str):
+    def playlist_sort_level_3(self, donor_playlist:str):
         '''
         Sort a playlist like a DJ: placing songs with compatible keys, BPM,
         energy levels, and genres next to each other. This is the most optimal
@@ -485,7 +488,82 @@ class DJ_Spotify:
         while len(donor_df)!=0:
             while True:
                 # Identify an ideal DJ song
-                next_index = self.dj_select_song(donor_df, recipient_df)
+                next_index = self.dj_select_song(donor_df, recipient_df,
+                                                 opt_select=True)
+                if next_index is not None:
+                    select_type = 'dj_optimal'
+                    break
+                # Identify an ideal key, bpm and (energy or genre) song
+                next_index = self.three_select_song(donor_df, recipient_df,
+                                                    opt_select=True)
+                if next_index is not None:
+                    select_type = 'dj_3'
+                    break
+                # Identify an ideal key & bpm song
+                next_index = self.two_select_song(donor_df, recipient_df,
+                                                  opt_select=True)
+                if next_index is not None:
+                    select_type = 'dj_2'
+                    break
+                # Identify an ideal harmonic song
+                next_index = self.key_select_song(donor_df, recipient_df,
+                                                  opt_select=True)
+                if next_index is not None:
+                    select_type = 'key'
+                    break
+                # Identify an ideal BPM song
+                next_index = self.bpm_select_song(donor_df, recipient_df,
+                                                  opt_select=True)
+                if next_index is not None:
+                    select_type = 'bpm'
+                    break
+                # Identify an ideal energy song
+                next_index = self.energy_select_song(donor_df, recipient_df,
+                                                     opt_select=True)
+                if next_index is not None:
+                    select_type = 'energy'
+                    break
+                # Identify an ideal genre song
+                next_index = self.genre_select_song(donor_df, recipient_df,
+                                                    opt_select=True)
+                if next_index is not None:
+                    select_type = 'genre'
+                    break
+                # If there are no good matches, select a random song
+                next_index = self.random_select_song(donor_df)
+                if next_index is not None:
+                    select_type = 'random'
+                    break
+            donor_df, recipient_df = self.move_song(donor_df, next_index,
+                                                    recipient_df, select_type)
+            sys.stdout.write('\rSorted {}/{} songs     '.format(len(recipient_df),
+                                                                    donor_len))
+            sys.stdout.flush()
+        return recipient_df
+
+    def playlist_sort_level_2(self, donor_playlist:str):
+        '''
+        Sort a playlist like a DJ: placing songs with compatible keys, BPM,
+        energy levels, and genres next to each other. This is a less optimal
+        sorting function as it will produce sorted playlists with more
+        variability.
+
+        '''
+        if isinstance(donor_playlist, str) is True:
+            donor_df = self.get_playlist_features(self.get_playlist_id(donor_playlist))
+        else:
+            donor_df = donor_playlist
+        donor_len = len(donor_df)
+        recipient_df = pd.DataFrame(columns=donor_df.columns)
+        # Begin by selecting a random song
+        song_1_index = self.random_select_song(donor_df)
+        donor_df, recipient_df = self.move_song(donor_df, song_1_index,
+                                                recipient_df)
+        while len(donor_df)!=0:
+            while True:
+                # Identify an ideal DJ song
+                next_index = self.dj_select_song(donor_df, recipient_df,
+                                                 opt_select=False)
                 if next_index is not None:
                     select_type = 'dj_optimal'
                     break
@@ -537,37 +615,7 @@ class DJ_Spotify:
             sys.stdout.flush()
         return recipient_df
 
-    def push_to_spotify(self, playlist_id:str, playlist_df:pd.DataFrame):
-        '''
-        Overwrite a Spotify playlist with its new song order. You are only
-        permitted to overwrite your own playlists.
-
-        '''
-        if len(playlist_df) <= 100:
-            self.sp.playlist_replace_items(playlist_id, playlist_df['track_id'])
-        elif len(playlist_df) > 100:
-            song_pool_temp = playlist_df
-            self.sp.playlist_replace_items(playlist_id,
-                                      song_pool_temp['track_id'].head(100))
-            song_pool_temp = song_pool_temp.tail(len(song_pool_temp)-100)
-            while len(song_pool_temp) > 0:
-                if len(song_pool_temp) > 100:
-                    self.sp.user_playlist_add_tracks(self.user,
-                                                playlist_id,
-                                                song_pool_temp['track_id'].head(100))
-                    song_pool_temp = song_pool_temp.tail(len(song_pool_temp)-100)
-                else:
-                    songs_left = len(song_pool_temp)
-                    self.sp.user_playlist_add_tracks(self.user,
-                                                playlist_id,
-                                                song_pool_temp['track_id'].head(songs_left))
-                    break
-        playlist_desc = html.unescape(self.sp.playlist(playlist_id)['description'])
-        desc_keep = playlist_desc.split('[', 1)[0]
-        desc_new = desc_keep + '[Sorted by dj_spotify]'
-        self.sp.playlist_change_details(playlist_id=playlist_id, description=desc_new)
-
-    def variety_playlist_sort(self, donor_playlist:str):
+    def playlist_sort_level_1(self, donor_playlist:str):
         '''
         Sort your playlist with more variety. This function still sorts your
         playlist using key, BPM, energy level, and genre; but in an
@@ -628,34 +676,86 @@ class DJ_Spotify:
             sys.stdout.flush()
         return recipient_df
 
+    def push_to_spotify(self, playlist_id:str, playlist_df:pd.DataFrame):
+        '''
+        Overwrite a Spotify playlist with its new song order. You are only
+        permitted to overwrite your own playlists.
+
+        '''
+        if len(playlist_df) <= 100:
+            self.sp.playlist_replace_items(playlist_id, playlist_df['track_id'])
+        elif len(playlist_df) > 100:
+            song_pool_temp = playlist_df
+            self.sp.playlist_replace_items(playlist_id,
+                                      song_pool_temp['track_id'].head(100))
+            song_pool_temp = song_pool_temp.tail(len(song_pool_temp)-100)
+            while len(song_pool_temp) > 0:
+                if len(song_pool_temp) > 100:
+                    self.sp.user_playlist_add_tracks(self.user,
+                                                playlist_id,
+                                                song_pool_temp['track_id'].head(100))
+                    song_pool_temp = song_pool_temp.tail(len(song_pool_temp)-100)
+                else:
+                    songs_left = len(song_pool_temp)
+                    self.sp.user_playlist_add_tracks(self.user,
+                                                playlist_id,
+                                                song_pool_temp['track_id'].head(songs_left))
+                    break
+        playlist_desc = html.unescape(self.sp.playlist(playlist_id)['description'])
+        desc_keep = playlist_desc.split('[', 1)[0]
+        desc_new = desc_keep + '[Sorted by dj_spotify]'
+        self.sp.playlist_change_details(playlist_id=playlist_id, description=desc_new)
+
+    def sort_playlist(self, donor_playlist_name:str, sort_mode:int=3):
+        '''
+        Main function: identify a playlist you own and determine how you would
+        like for it to be sorted. The playlist will be sorted and automatically
+        updated in Spotify
+
+        '''
+        playlist_id = self.get_playlist_id(donor_playlist_name)
+        print('Sorting {}...'.format(donor_playlist_name))
+        donor_df = self.get_playlist_features(playlist_id)
+        if sort_mode == 3:
+            playlist_sorted = self.playlist_sort_level_3(donor_df)
+        elif sort_mode == 2:
+            playlist_sorted = self.playlist_sort_level_2(donor_df)
+        else:
+            playlist_sorted = self.playlist_sort_level_1(donor_df)
+        self.push_to_spotify(playlist_id, playlist_sorted)
+        return playlist_sorted
+        print('\nDone.')
+
     def sort_certain_playlists(self, donor_playlists:dict):
         '''
-        Sort all public playlists listed on your Spotify profile. To keep the
-        order of your playlists fresh, it is advised to re-sort your playlists
-        at least on a weekly basis.
+        Sort a list of public playlists listed on your Spotify profile. To keep
+        the order of your playlists fresh, it is advised to re-sort your
+        playlists at least on a weekly basis.
 
         '''
         for playlist in donor_playlists:
             print('\rSorting songs from {}...'.format(playlist))
             self.sp = self._connect()
-            if donor_playlists.get(playlist) is False:
-                playlist_sorted = self.variety_playlist_sort(donor_playlist=playlist)
+            if donor_playlists.get(playlist) == 3:
+                playlist_sorted = self.playlist_sort_level_3(playlist)
+            elif donor_playlists.get(playlist) == 2:
+                playlist_sorted = self.playlist_sort_level_2(playlist)
             else:
-                playlist_sorted = self.dj_playlist_sort(donor_playlist=playlist)
+                playlist_sorted = self.playlist_sort_level_1(playlist)
             self.push_to_spotify(playlist_id=self.get_playlist_id(playlist),
                                  playlist_df=playlist_sorted)
         print('\rAll playlists sorted.')
 
     def combine_playlists(self, donor_playlists:list, recipient_playlist:str,
                           duration_h:int=4, energy_filter:bool=False,
-                          opt_select:bool=False):
+                          sort_mode:int=3):
         '''
         Combine other playlists into a single playlist. This function is useful
         for extracting playlists created by others into your own. Helping keep
         you up to date on your favorite playlists while simultaneously sorting
         them.
 
-        Again, you can only overwrite the order of your own playlist. However,
+        Again, you can only overwrite the order of your own playlists. However,
         you can pull songs from any public playlist, given the playlist's name
         and owner's username. You can identify the username of any user by
         selecting "Copy Link to Profile" and extracting the string or numbers
@@ -694,10 +794,12 @@ class DJ_Spotify:
             playlist_pool = pd.concat([playlist_pool, playlist_pool_small])
         recipient_df = playlist_pool.drop_duplicates(subset=['track_id']).reset_index(drop=True)
         print('\nSorting {}...'.format(recipient_playlist))
-        if opt_select is False:
-            playlist_sorted = self.variety_playlist_sort(donor_playlist=recipient_df)
+        if sort_mode == 3:
+            playlist_sorted = self.playlist_sort_level_3(recipient_df)
+        elif sort_mode == 2:
+            playlist_sorted = self.playlist_sort_level_2(recipient_df)
         else:
-            playlist_sorted = self.dj_playlist_sort(donor_playlist=recipient_df)
+            playlist_sorted = self.playlist_sort_level_1(recipient_df)
         print('\nPlaylists combined.')
         self.push_to_spotify(self.get_playlist_id(recipient_playlist),
                              playlist_sorted)
