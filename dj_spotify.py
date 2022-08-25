@@ -713,6 +713,7 @@ class DJ_Spotify:
         updated in Spotify
 
         '''
+        self.sp = self._connect()
         playlist_id = self.get_playlist_id(donor_playlist_name)
         print('Sorting {}...'.format(donor_playlist_name))
         donor_df = self.get_playlist_features(playlist_id)
