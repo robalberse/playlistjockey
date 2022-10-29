@@ -804,3 +804,4 @@ class DJ_Spotify:
         print('\nPlaylists combined.')
         self.push_to_spotify(self.get_playlist_id(recipient_playlist),
                              playlist_sorted)
+        return playlist_sorted
