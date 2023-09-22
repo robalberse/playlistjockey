@@ -4,4 +4,5 @@ __pycache__/
 .ipynb_checkpoints/
 .song_ids.db-journal/
 .cache
-update_playlists.py
+test.ipynb
+.DS_Store
