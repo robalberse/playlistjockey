@@ -59,7 +59,7 @@ def key_wrap(self, key):
     return lower, upper
 
 
-def move_song(self, donor_df, recipient_df, next_song_index, select_type=None):
+def move_song(donor_df, recipient_df, next_song_index, select_type=None):
     if select_type:
         donor_df.at[next_song_index, "select_type"] = select_type
     recipient_df = pd.concat([recipient_df, donor_df.loc[[next_song_index]]])

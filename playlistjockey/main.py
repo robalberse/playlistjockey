@@ -3,7 +3,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 import numpy as np
 
-from playlistjockey import connect, utils, extract
+from playlistjockey import connect, utils, extract, mixes
 
 class PlaylistJockey:
     def __init__(self, client_id, client_secret):
@@ -28,7 +28,8 @@ class PlaylistJockey:
 
         # Explode and scale genres
         dummies = playlist_df['genres'].explode().str.get_dummies()
-        dummies = dummies.sum(level=0).add_prefix('genre_')
+        dummies = dummies.groupby(level=0).sum()
+        # dummies = dummies.sum(level=0).add_prefix('genre_')
         dummies = MinMaxScaler().fit_transform(dummies)
 
         # Apply PCA to identify similar song groupings
@@ -41,3 +42,11 @@ class PlaylistJockey:
         playlist_df['artist_similarity'] = playlist_df['artist_similarity'].apply(lambda x: round(x*10))
 
         return playlist_df
+    
+    def sort_playlist(self, playlist_df, mix):
+        if mix == 'dj':
+            mix_algorhythm = mixes.dj_mix
+        
+        df = mix_algorhythm(playlist_df)
+
+        return df
