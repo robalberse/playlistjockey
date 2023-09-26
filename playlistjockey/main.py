@@ -1,12 +1,23 @@
 import pandas as pd
 import html
 
-from playlistjockey import connect, utils, extract, mixes
+from playlistjockey import utils, mixes
+from playlistjockey.spotify import connect as sp_connect, extract as sp_extract
+from playlistjockey.tidal import connect as td_connect, extract as td_extract
 
 
-class PlaylistJockey:
+def sort_playlist(playlist_df, mix):
+    if mix == "dj":
+        mix_algorhythm = mixes.dj_mix
+
+    df = mix_algorhythm(playlist_df)
+
+    return df
+
+
+class Spotify:
     def __init__(self, client_id, client_secret, redirect_uri):
-        self.sp = connect.connect_spotify(client_id, client_secret, redirect_uri)
+        self.sp = sp_connect.connect_spotify(client_id, client_secret, redirect_uri)
 
     def get_playlist_features(self, playlist_id):
         # Get playlist object
@@ -22,18 +33,10 @@ class PlaylistJockey:
         # Now iterate through each song to get required features
         feature_store = []
         for i in song_ids:
-            feature_store.append(extract.get_track_features(self.sp, i))
+            feature_store.append(sp_extract.get_track_features(self.sp, i))
         playlist_df = pd.DataFrame(feature_store)
 
         return playlist_df
-
-    def sort_playlist(self, playlist_df, mix):
-        if mix == "dj":
-            mix_algorhythm = mixes.dj_mix
-
-        df = mix_algorhythm(playlist_df)
-
-        return df
 
     def push_playlist(self, playlist_id, playlist_df):
         if len(playlist_df) <= 100:
@@ -62,3 +65,8 @@ class PlaylistJockey:
         desc_keep = playlist_desc.split("(", 1)[0]
         desc_new = desc_keep + "(Mixed by playlistjockey)"
         self.sp.playlist_change_details(playlist_id=playlist_id, description=desc_new)
+
+
+class Tidal:
+    def __init__(self):
+        pass
