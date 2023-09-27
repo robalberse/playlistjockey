@@ -1,1 +1,1 @@
-from .main import Spotify, sort_playlist
+from .main import Spotify, Tidal, sort_playlist

@@ -34,7 +34,7 @@ def connect():
             token_type="Bearer", access_token=access_token, refresh_token=refresh_token
         )
     except:
-        print("Previous Tidal session has expired.")
+        print("Tidal session requires refresh:")
         td = tidalapi.Session()
         td.login_oauth_simple()
         config["tidal"]["access_token"] = td.access_token

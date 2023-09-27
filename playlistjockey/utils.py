@@ -1,4 +1,6 @@
 import pandas as pd
+import re
+from difflib import SequenceMatcher as sm
 
 
 def show_tracks(results, results_array):
@@ -66,3 +68,22 @@ def move_song(donor_df, recipient_df, next_song_index, select_type=None):
     donor_df = donor_df.drop(next_song_index)
 
     return donor_df, recipient_df
+
+
+def clean_title(string):
+    return re.split("[-:&/.•[(]+", string)[0].strip()
+
+
+def clean_artist(string):
+    string = string.replace("The ", "").strip()
+    string = clean_title(string)
+
+    return string
+
+
+def text_similarity(str_a, str_b):
+    similarity = sm(None, str_a, str_b).ratio()
+    if similarity >= 0.8:
+        return True
+    else:
+        return False
