@@ -22,7 +22,6 @@ def get_track_features(sp, song_id):
         "track_id": basic_info["id"],
         "title": basic_info["name"],
         "artists": artists,
-        "release_year": int(pd.to_datetime(basic_info["album"]["release_date"]).year),
         "duration_s": round(basic_info["duration_ms"] / 1000, 1),
         "key": camelot,
         "bpm": round(audio_info[0]["tempo"]),
