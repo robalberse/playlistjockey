@@ -66,7 +66,7 @@ class Spotify:
 
         return playlist_df
 
-    def push_playlist(self, playlist_id, playlist_df):
+    def update_playlist(self, playlist_id, playlist_df):
         """Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
 
         Args:
@@ -138,7 +138,7 @@ class Tidal:
 
         return playlist_df
 
-    def push_playlist(self, playlist_id, playlist_df):
+    def update_playlist(self, playlist_id, playlist_df):
         """Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
 
         Args:
