@@ -4,6 +4,7 @@ from playlistjockey import selects, utils
 
 
 def dj_mix(donor_df):
+    """Mixing algorithm that sorts a playlist like a DJ: utilizing compatible keys, bpms, and energy features."""
     # Establish the recipient df that will be the playlist's new order
     recipient_df = pd.DataFrame(columns=donor_df.columns)
 

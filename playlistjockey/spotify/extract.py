@@ -3,6 +3,7 @@ from playlistjockey import utils
 
 
 def get_track_features(sp, song_id):
+    """Acquires all necessary song features for the mixing algorithms to consider."""
     # Get basic and audio objects for the given track
     basic_info = sp.track(song_id)
     audio_info = sp.audio_features(song_id)

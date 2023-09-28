@@ -2,6 +2,7 @@ from playlistjockey import utils
 
 
 def get_spotify_id(sp, isrc, title, artist):
+    """Identifies the same Tidal song in Spotify, so that its features can be extracted."""
     queries = [
         "isrc:" + isrc,
         "track:{}, artist:{}".format(title, artist),
@@ -54,6 +55,7 @@ def get_spotify_id(sp, isrc, title, artist):
 
 
 def get_song_features(sp, td, td_track_id):
+    """Acquires all necessary song features for the mixing algorithms to consider."""
     # Pull in Tidal track object
     td_track = td.track(td_track_id)
 

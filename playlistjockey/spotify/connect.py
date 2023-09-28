@@ -4,6 +4,7 @@ import spotipy
 
 
 def connect_spotify(client_id, client_secret, redirect_uri):
+    """Connects to Spotify's API using Spotipy."""
     os.environ["SPOTIPY_CLIENT_ID"] = client_id
     os.environ["SPOTIPY_CLIENT_SECRET"] = client_secret
     os.environ["SPOTIPY_REDIRECT_URI"] = redirect_uri

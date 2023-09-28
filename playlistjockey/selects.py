@@ -5,6 +5,7 @@ from playlistjockey import filters
 
 
 def random_select_song(donor_df):
+    """Select a random song from the donor_df."""
     try:
         next_song_index = random.choice(list(donor_df.index))
     except:
@@ -13,6 +14,7 @@ def random_select_song(donor_df):
 
 
 def dj_select_song(donor_df, recipient_df):
+    """Select a compatible DJ song from the donor_df using the last song from the recipient_df."""
     # Filter for songs with differeing artists, and compatible keys and bpms
     donor_df = filters.artist_filter(donor_df, recipient_df)
     donor_df = filters.key_filter(donor_df, recipient_df)
@@ -26,6 +28,7 @@ def dj_select_song(donor_df, recipient_df):
 
 
 def basic_select_song(donor_df, recipient_df):
+    """Select a song from the donor_df using the last song from the recipient_df that has at least one compatible feature."""
     # Filter for differing artists
     donor_df = filters.artist_filter(donor_df, recipient_df)
 
@@ -43,6 +46,7 @@ def basic_select_song(donor_df, recipient_df):
 
 
 def party_select_song(donor_df, recipient_df):
+    """Select a song from the donor_df using the last song from the recipient_df that has the maximum energy and/or danceability."""
     # Filter for songs with differeing artists, and compatible keys and bpms
     donor_df = filters.artist_filter(donor_df, recipient_df)
     donor_df = filters.key_filter(donor_df, recipient_df)
@@ -61,6 +65,7 @@ def party_select_song(donor_df, recipient_df):
 
 
 def setlist_select_song(donor_df, recipient_df):
+    """Select a song from the donor_df using the last song from the recipient_df that has the minimum energy and/or popularity."""
     # Filter for songs with compatible energy and popularity
     donor_df = filters.plus_minus_1_filter(donor_df, recipient_df, "energy")
     donor_df = filters.plus_minus_1_filter(donor_df, recipient_df, "popularity")

@@ -1,6 +1,10 @@
 # playlistjockey
 Unlock innovative ways to experience playlists.
 
+Currently supporting:
+
+![Spotify](playlistjockey/docs/spotify.jpg) ![Tidal](playlistjockey/docs/tidal.jpg)
+
 ### Description
 Since the inception of music players, we've always had 3 methods of playback: shuffle, repeat, and repeat once. Frankly, we can do better.
 
@@ -11,10 +15,45 @@ Happy mixing!
 
 ### Setup
 In order to utilize this module, you will first need to create a Spotify developer account:
-  1. Visit https://developer.spotify.com/ and create a free account (Spotify premium is not required)
-  2. Once in your Dashboard, click on Create app, and provide a name and description
-  4. On the overview page for your app, go to settings
-  5. Save your Client ID and Client Secret, create a Redirect URI
+  1. Visit https://developer.spotify.com/ and create a free account (Spotify Premium is not required)
+  2. Once in your dashboard, click on create app, and provide a name and description
+  3. On the overview page for your app, go to settings
+  4. Save your client ID and client secret, create a redirect URI
+
+Import the package:
+```python
+import playlistjockey as pj
+```
+Initialize the Spotify object, and if you use another streaming service, initialize it as well:
+```python
+sp = pj.Spotify('<Client ID>', '<Client Secret>', '<Redirect URI>')
+
+td = pj.Tidal(sp)
+```
+The following will need to be done when first initializng these streaming platform objects:
+  * __Spotify__: Return the callback link automatically opened by your browser into the input prompted by your IDE
+  * __Tidal__: Your browser will automatically open a window prompting you to log into your Tidal account
+
+> [!NOTE]
+> These objects are supported by official and unofficial Python API projects. If you experience connection issues, resets and patience are sometimes required.
+
+Once your connections to your streaming platforms are established, you can pull in one of your playlists:
+```python
+playlist_id = 'https://open.spotify.com/playlist/7kIvZ3p234OPRRgibzNoQS?si=9d743a7caec143b9'
+
+playlist_df = sp.get_playlist_features(playist_id)
+``` 
+
+Next, utilize a `playlistjockey` sorting algorithm to mix your playlist:
+```python
+sorted_df = pj.sort_playlist(playlist_df, 'dj')
+```
+
+Preview the new track order, rerun as many times as you'd like. Once you're ready, push it back to update your playlist:
+```python
+sp.push_playlist(playlist_id, sorted_df)
+```
+
 
 ### Playback
 When experiencing a playlist that has been sorted by playlistjockey, enable to following suggested Playback settings:
