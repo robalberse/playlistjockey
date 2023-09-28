@@ -4,6 +4,7 @@ from difflib import SequenceMatcher as sm
 
 
 def show_tracks(results, results_array):
+    """Helper function to ensure the all songs are extracted from a Spotify playlist with more than 100 songs."""
     for i, item in enumerate(results["items"]):
         try:
             track = item["track"]
@@ -13,11 +14,13 @@ def show_tracks(results, results_array):
 
 
 def show_playlists(results, results_array):
+    """Helper function to ensure all playlists are extracted from a Spotify user with more than 100 playlists."""
     for i, item in enumerate(results["items"]):
         results_array.append(item)
 
 
 def spotify_key_to_camelot(spotify_key, spotify_mode):
+    """Converts Spotipy's key and mode notation to camelot notation."""
     camelot_dict = {
         (0, 1): "8B",
         (1, 1): "3B",
@@ -49,19 +52,8 @@ def spotify_key_to_camelot(spotify_key, spotify_mode):
     return camelot_key
 
 
-def key_wrap(self, key):
-    lower = key - 1
-    if lower == 0:
-        lower = 12
-
-    upper = key + 1
-    if upper == 13:
-        upper = 1
-
-    return lower, upper
-
-
 def move_song(donor_df, recipient_df, next_song_index, select_type=None):
+    """Helper function that moves a song from the donor_df to the recipient_df, given its index."""
     if select_type:
         donor_df.at[next_song_index, "select_type"] = select_type
     recipient_df = pd.concat([recipient_df, donor_df.loc[[next_song_index]]])
@@ -71,10 +63,12 @@ def move_song(donor_df, recipient_df, next_song_index, select_type=None):
 
 
 def clean_title(string):
+    """Helper function to remove any aspects of a song title that may hinder searching for it."""
     return re.split("[-:&/.•[(]+", string)[0].strip()
 
 
 def clean_artist(string):
+    """Helper function to remove any aspects of a artist title that may hinder searching for it."""
     string = string.replace("The ", "").strip()
     string = clean_title(string)
 
@@ -82,6 +76,7 @@ def clean_artist(string):
 
 
 def text_similarity(str_a, str_b):
+    """Helper function to easily compare song titles or artists to ensure a match."""
     similarity = sm(None, str_a, str_b).ratio()
     if similarity >= 0.8:
         return True

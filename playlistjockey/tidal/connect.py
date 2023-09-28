@@ -1,11 +1,11 @@
 import configparser
 import pkg_resources
-import os
 
 import tidalapi
 
 
 def first_time_connect():
+    """Establishes a config.ini file to store access tokens."""
     # Establish config file
     config = configparser.ConfigParser()
     path = pkg_resources.resource_filename(__name__, "config.ini")
@@ -20,6 +20,7 @@ def first_time_connect():
 
 
 def connect():
+    """Connects to Tidal's API using third party tidalapi package."""
     config = configparser.ConfigParser()
     path = pkg_resources.resource_filename(__name__, "config.ini")
     if len(config.read(path)) == 0:

@@ -7,6 +7,15 @@ from playlistjockey.tidal import connect as td_connect, extract as td_extract
 
 
 def sort_playlist(playlist_df, mix):
+    """Sorts the songs in a playlist df using a specified mixing algorithm.
+
+    Args:
+        playlist_df (pd.DataFrame): DataFrame containing songs with required columns.
+        mix (str): String identifying which mixing algorithm you would like to use to sort the playlist. Options so far only include "dj".
+
+    Returns:
+        df (pd.DataFrame): DataFrame with the updated sorting of songs.
+    """
     if mix == "dj":
         mix_algorhythm = mixes.dj_mix
 
@@ -16,10 +25,29 @@ def sort_playlist(playlist_df, mix):
 
 
 class Spotify:
+    """Class used for pulling and pushing playlists to and from Spotify.
+
+    Args:
+        client_id (str): Your Client ID generated from your Spotify application.
+        client_secret (str): Your Client Secret ID generated from your Spotify application.
+        redirect_uri (str): Your Redirect URI set from your Spotify application.
+
+    Attributes:
+        sp (spotipy.client.Spotify object): Spotify API client used to connect to your account.
+    """
+
     def __init__(self, client_id, client_secret, redirect_uri):
         self.sp = sp_connect.connect_spotify(client_id, client_secret, redirect_uri)
 
     def get_playlist_features(self, playlist_id):
+        """Pull in all required features of songs in a given playlist.
+
+        Args:
+            playlist_id (str): Unique Spotify playlist ID or shared link. This can be acquired by selecting a playlist and selecting the "copy link to playlist" option under share.
+
+        Returns:
+            playlist_df (pd.DataFrame): DataFrame of all tracks and their features in the inputted playlist. To be used as input into the sort_playlist function.
+        """
         # Get playlist object
         playlist = self.sp.playlist(playlist_id)["tracks"]
 
@@ -39,6 +67,13 @@ class Spotify:
         return playlist_df
 
     def push_playlist(self, playlist_id, playlist_df):
+        """Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
+
+        Args:
+            playlist_id (str): Unique Spotify playlist ID or shared link. This can be acquired by selecting a playlist and selecting the "copy link to playlist" option under share.
+            playlist_df (pd.DataFrame): DataFrame containing the new tracks and order the playlist will be in. This is intended to be the returned DataFrame from the sort_playlist function.
+
+        """
         if len(playlist_df) <= 100:
             self.sp.playlist_replace_items(playlist_id, playlist_df["track_id"])
         elif len(playlist_df) > 100:
@@ -68,11 +103,29 @@ class Spotify:
 
 
 class Tidal:
+    """Class used for pulling and pushing playlists to and from Tidal.
+
+    Args:
+        spotify (playlistjockey.main.Spotify object): Spotify object by calling the playlistjockey.Spotify class.
+
+    Attributes:
+        sp (spotipy.client.Spotify object): Spotify API client used to connect to your account.
+        td (tidalapi.session.Session object): Tidal API client used to connect to your account.
+    """
     def __init__(self, spotify):
         self.sp = spotify.sp
         self.td = td_connect.connect()
 
     def get_playlist_features(self, playlist_id):
+        """Pull in all required features of songs in a given playlist.
+
+        Args:
+            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share,
+            and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
+
+        Returns:
+            playlist_df (pd.DataFrame): DataFrame of all tracks and their features in the inputted playlist. To be used as input into the sort_playlist function.
+        """
         # Pull in the playlist tracks
         tracks = self.td.playlist(playlist_id).tracks()
 
@@ -86,6 +139,14 @@ class Tidal:
         return playlist_df
 
     def push_playlist(self, playlist_id, playlist_df):
+        """Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
+
+        Args:
+            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share,
+            and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
+            playlist_df (pd.DataFrame): DataFrame containing the new tracks and order the playlist will be in. This is intended to be the returned DataFrame from the sort_playlist function.
+
+        """
         # Get playlist object
         playlist = self.td.playlist(playlist_id)
 
