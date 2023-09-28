@@ -3,7 +3,7 @@ Unlock innovative ways to experience playlists.
 
 Currently supporting:
 
-![Spotify](playlistjockey/docs/spotify.jpg) ![Tidal](playlistjockey/docs/tidal.jpg)
+![Spotify](docs/spotify.jpg) ![Tidal](docs/tidal.jpg)
 
 ### Description
 Since the inception of music players, we've always had 3 methods of playback: shuffle, repeat, and repeat once. Frankly, we can do better.
