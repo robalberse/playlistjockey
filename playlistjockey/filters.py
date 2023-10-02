@@ -103,3 +103,12 @@ def plus_minus_1_filter(donor_df, recipient_df, column):
     ]
 
     return donor_df
+
+
+def equal_filter(donor_df, recipient_df, column):
+    """Filters donor_df for the same value in inputted quantitative column from the last song in recipient_df."""
+    prev_value = recipient_df.iloc[-1][column]
+
+    donor_df = donor_df[donor_df["column"] == prev_value]
+
+    return donor_df

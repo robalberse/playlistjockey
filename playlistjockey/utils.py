@@ -83,11 +83,12 @@ def text_similarity(str_a, str_b):
     else:
         return False
 
-def progress_bar(value, total, prefix='', suffix='', decimals = 1, length = 100, fill = '█'):
+
+def progress_bar(value, total, prefix="", suffix="", decimals=1, length=100, fill="█"):
     percent = ("{0:." + str(decimals) + "f}").format(100 * (value / float(total)))
     filledLength = int(length * value // total)
-    bar = fill * filledLength + '-' * (length - filledLength)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = '\r')
+    bar = fill * filledLength + "-" * (length - filledLength)
+    print(f"\r{prefix} |{bar}| {percent}% {suffix}", end="\r")
     # Print New Line on Complete
-    if value == total: 
-        print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = 'Done.')
+    if value == total:
+        print(f"\r{prefix} |{bar}| {percent}% {suffix}", end="Done.")
