@@ -49,18 +49,20 @@ class Spotify:
             playlist_df (pd.DataFrame): DataFrame of all tracks and their features in the inputted playlist. To be used as input into the sort_playlist function.
         """
         # Get playlist object
-        playlist = self.sp.playlist(playlist_id)["tracks"]
+        playlist = self.sp.playlist(playlist_id)
+        playlist_tracks = playlist["tracks"]
 
         # First, get all song IDs for feature extraction
         song_ids = []
-        utils.show_tracks(playlist, song_ids)
-        while playlist["next"]:
-            playlist = self.sp.next(playlist)
-            utils.show_tracks(playlist, song_ids)
+        utils.show_tracks(playlist_tracks, song_ids)
+        while playlist_tracks["next"]:
+            playlist_tracks = self.sp.next(playlist)
+            utils.show_tracks(playlist_tracks, song_ids)
 
         # Now iterate through each song to get required features
         feature_store = []
         for i in song_ids:
+            utils.progress_bar(len(feature_store)+1, len(song_ids), prefix='Loading songs from {}:'.format(playlist['name']))
             feature_store.append(sp_extract.get_track_features(self.sp, i))
         playlist_df = pd.DataFrame(feature_store)
 
@@ -127,11 +129,13 @@ class Tidal:
             playlist_df (pd.DataFrame): DataFrame of all tracks and their features in the inputted playlist. To be used as input into the sort_playlist function.
         """
         # Pull in the playlist tracks
-        tracks = self.td.playlist(playlist_id).tracks()
+        playlist = self.td.playlist(playlist_id)
+        tracks = playlist.tracks()
 
         # Now iterate through each song to get required features
         feature_store = []
         for i in tracks:
+            utils.progress_bar(len(feature_store)+1, len(tracks), prefix='Loading songs from {}:'.format(playlist.name))
             feature_store.append(td_extract.get_song_features(self.sp, self.td, i.id))
 
         playlist_df = pd.DataFrame(feature_store)
