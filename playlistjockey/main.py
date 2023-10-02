@@ -18,6 +18,10 @@ def sort_playlist(playlist_df, mix):
     """
     if mix == "dj":
         mix_algorhythm = mixes.dj_mix
+    elif mix == "party":
+        mix_algorhythm = mixes.party_mix
+    elif mix == "setlist":
+        mix_algorhythm = mixes.setlist_mix
 
     df = mix_algorhythm(playlist_df)
 

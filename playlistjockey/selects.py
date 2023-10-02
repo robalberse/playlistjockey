@@ -59,7 +59,10 @@ def party_select_song(donor_df, recipient_df):
     # Combine the compatible song dfs, and select the song with the highest energy and danceability
     donor_df = pd.concat([energy_df, dance_df])
     donor_df.sort_values(by=["energy", "danceability"], ascending=False, inplace=True)
-    next_song_index = donor_df.head(1).index[0]
+    try:
+        next_song_index = donor_df.head(1).index[0]
+    except:
+        next_song_index = None
 
     return next_song_index
 
@@ -72,6 +75,9 @@ def setlist_select_song(donor_df, recipient_df):
 
     # Select the song wiht the lowest energy and popularity
     donor_df.sort_values(by=["energy", "danceability"], inplace=True)
-    next_song_index = donor_df.head(1).index[0]
+    try:
+        next_song_index = donor_df.head(1).index[0]
+    except:
+        next_song_index = None
 
     return next_song_index
