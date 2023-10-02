@@ -62,7 +62,11 @@ class Spotify:
         # Now iterate through each song to get required features
         feature_store = []
         for i in song_ids:
-            utils.progress_bar(len(feature_store)+1, len(song_ids), prefix='Loading songs from {}:'.format(playlist['name']))
+            utils.progress_bar(
+                len(feature_store) + 1,
+                len(song_ids),
+                prefix="Loading songs from {}:".format(playlist["name"]),
+            )
             feature_store.append(sp_extract.get_track_features(self.sp, i))
         playlist_df = pd.DataFrame(feature_store)
 
@@ -114,6 +118,7 @@ class Tidal:
         sp (spotipy.client.Spotify object): Spotify API client used to connect to your account.
         td (tidalapi.session.Session object): Tidal API client used to connect to your account.
     """
+
     def __init__(self, spotify):
         self.sp = spotify.sp
         self.td = td_connect.connect()
@@ -135,7 +140,11 @@ class Tidal:
         # Now iterate through each song to get required features
         feature_store = []
         for i in tracks:
-            utils.progress_bar(len(feature_store)+1, len(tracks), prefix='Loading songs from {}:'.format(playlist.name))
+            utils.progress_bar(
+                len(feature_store) + 1,
+                len(tracks),
+                prefix="Loading songs from {}:".format(playlist.name),
+            )
             feature_store.append(td_extract.get_song_features(self.sp, self.td, i.id))
 
         playlist_df = pd.DataFrame(feature_store)
