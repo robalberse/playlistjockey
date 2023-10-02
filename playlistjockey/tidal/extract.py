@@ -54,7 +54,7 @@ def get_spotify_id(sp, isrc, title, artist):
     return result
 
 
-def get_song_features(sp, td, td_track_id):
+def get_song_features(sp, td, td_track_id, genres=False):
     """Acquires all necessary song features for the mixing algorithms to consider."""
     # Pull in Tidal track object
     td_track = td.track(td_track_id)
@@ -71,10 +71,10 @@ def get_song_features(sp, td, td_track_id):
 
     # Pull in Spotify track object
     sp_track_id = get_spotify_id(sp, isrc, title, artist)
-    sp_track = sp.audio_features(sp_track_id)[0]
+    audio_info = sp.audio_features(sp_track_id)[0]
 
     # Pull in song key information and remaining features
-    camelot = utils.spotify_key_to_camelot(sp_track["key"], sp_track["mode"])
+    camelot = utils.spotify_key_to_camelot(audio_info["key"], audio_info["mode"])
 
     song_features = {
         "track_id": td_track_id,
@@ -83,10 +83,26 @@ def get_song_features(sp, td, td_track_id):
         "artists": artists,
         "duration_s": round(td_track.duration, 1),
         "key": camelot,
-        "bpm": round(sp_track["tempo"]),
-        "energy": round(sp_track["energy"] * 10),
-        "danceability": round(sp_track["danceability"] * 10),
+        "bpm": round(audio_info["tempo"]),
+        "energy": round(audio_info["energy"] * 10),
+        "danceability": round(audio_info["danceability"] * 10),
         "popularity": round(td_track.popularity / 10),
     }
+
+    if genres:
+        # Get basic Spotify track object
+        basic_info = sp.track(sp_track_id)
+
+        # Collect the genres the track's artists, and their related artists
+        genres = []
+        for i in basic_info["artists"]:
+            genres.append(sp.artist(i["id"])["genres"])
+            for j in sp.artist_related_artists(i["id"])["artists"]:
+                genres.append(j["genres"])
+        genres = [i for sublist in genres for i in sublist]  # flatten genres
+        genres = list(set(genres))  # remove duplicates
+
+        # Attach to dict
+        song_features.update({"genres": genres})
 
     return song_features

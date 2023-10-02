@@ -1,5 +1,8 @@
 import pandas as pd
+import numpy as np
 import html
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.decomposition import PCA
 
 from playlistjockey import utils, mixes
 from playlistjockey.spotify import connect as sp_connect, extract as sp_extract
@@ -22,6 +25,8 @@ def sort_playlist(playlist_df, mix):
         mix_algorhythm = mixes.party_mix
     elif mix == "setlist":
         mix_algorhythm = mixes.setlist_mix
+    elif mix == "genre":
+        mix_algorhythm = mixes.genre_mix
 
     df = mix_algorhythm(playlist_df)
 
@@ -43,7 +48,7 @@ class Spotify:
     def __init__(self, client_id, client_secret, redirect_uri):
         self.sp = sp_connect.connect_spotify(client_id, client_secret, redirect_uri)
 
-    def get_playlist_features(self, playlist_id):
+    def get_playlist_features(self, playlist_id, genres=False):
         """Pull in all required features of songs in a given playlist.
 
         Args:
@@ -60,7 +65,7 @@ class Spotify:
         song_ids = []
         utils.show_tracks(playlist_tracks, song_ids)
         while playlist_tracks["next"]:
-            playlist_tracks = self.sp.next(playlist)
+            playlist_tracks = self.sp.next(playlist_tracks)
             utils.show_tracks(playlist_tracks, song_ids)
 
         # Now iterate through each song to get required features
@@ -71,8 +76,25 @@ class Spotify:
                 len(song_ids),
                 prefix="Loading songs from {}:".format(playlist["name"]),
             )
-            feature_store.append(sp_extract.get_track_features(self.sp, i))
+            feature_store.append(sp_extract.get_track_features(self.sp, i, genres))
         playlist_df = pd.DataFrame(feature_store)
+
+        if genres:
+            # Explode and scale genres
+            dummies = playlist_df["genres"].explode().str.get_dummies()
+            dummies = dummies.groupby(level=0).sum()
+            dummies = MinMaxScaler().fit_transform(dummies)
+
+            # Apply PCA to identify similar song groupings
+            pca = PCA(n_components=1)
+            log_pca = pca.fit_transform(dummies)
+            pca_feature_importance = np.around(MinMaxScaler().fit_transform(log_pca), 3)
+
+            # Add into df
+            playlist_df["artist_similarity"] = pca_feature_importance
+            playlist_df["artist_similarity"] = playlist_df["artist_similarity"].apply(
+                lambda x: round(x * 10)
+            )
 
         return playlist_df
 
@@ -127,7 +149,7 @@ class Tidal:
         self.sp = spotify.sp
         self.td = td_connect.connect()
 
-    def get_playlist_features(self, playlist_id):
+    def get_playlist_features(self, playlist_id, genres=False):
         """Pull in all required features of songs in a given playlist.
 
         Args:
@@ -149,9 +171,28 @@ class Tidal:
                 len(tracks),
                 prefix="Loading songs from {}:".format(playlist.name),
             )
-            feature_store.append(td_extract.get_song_features(self.sp, self.td, i.id))
+            feature_store.append(
+                td_extract.get_song_features(self.sp, self.td, i.id, genres)
+            )
 
         playlist_df = pd.DataFrame(feature_store)
+
+        if genres:
+            # Explode and scale genres
+            dummies = playlist_df["genres"].explode().str.get_dummies()
+            dummies = dummies.groupby(level=0).sum()
+            dummies = MinMaxScaler().fit_transform(dummies)
+
+            # Apply PCA to identify similar song groupings
+            pca = PCA(n_components=1)
+            log_pca = pca.fit_transform(dummies)
+            pca_feature_importance = np.around(MinMaxScaler().fit_transform(log_pca), 3)
+
+            # Add into df
+            playlist_df["artist_similarity"] = pca_feature_importance
+            playlist_df["artist_similarity"] = playlist_df["artist_similarity"].apply(
+                lambda x: round(x * 10)
+            )
 
         return playlist_df
 
