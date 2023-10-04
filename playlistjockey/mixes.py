@@ -59,15 +59,15 @@ def party_mix(donor_df):
     while song_index is None:
         song_index = selects.party_select_song(donor_df, rec_front_half)
         if song_index:
-            select_type = "party"
+            select_type = 'party'
             break
         song_index = selects.dj_select_song(donor_df, rec_front_half)
         if song_index:
-            select_type = "dj"
+            select_type = 'dj'
             break
         song_index = selects.basic_select_song(donor_df, rec_front_half)
         if song_index:
-            select_type = "basic"
+            select_type = 'basic'
             break
     donor_df, rec_back_half = utils.move_song(
         donor_df, rec_back_half, song_index, select_type
@@ -141,17 +141,16 @@ def setlist_mix(donor_df):
     while song_index is None:
         song_index = selects.setlist_select_song(donor_df, rec_front_half)
         if song_index:
-            select_type = "setlist"
+            select_type = 'setlist'
             break
         song_index = selects.dj_select_song(donor_df, rec_front_half)
         if song_index:
-            select_type = "dj"
+            select_type = 'dj'
             break
         song_index = selects.basic_select_song(donor_df, rec_front_half)
         if song_index:
-            select_type = "basic"
+            select_type = 'basic'
             break
-    song_index = selects.setlist_select_song(donor_df, rec_front_half)
     donor_df, rec_back_half = utils.move_song(
         donor_df, rec_back_half, song_index, select_type
     )
