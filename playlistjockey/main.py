@@ -14,7 +14,7 @@ def sort_playlist(playlist_df, mix):
 
     Args:
         playlist_df (pd.DataFrame): DataFrame containing songs with required columns.
-        mix (str): String identifying which mixing algorithm you would like to use to sort the playlist. Options so far only include "dj".
+        mix (str): String identifying which mixing algorithm you would like to use to sort the playlist. Options so far include "dj", "party", "setlist", and "genre".
 
     Returns:
         df (pd.DataFrame): DataFrame with the updated sorting of songs.
