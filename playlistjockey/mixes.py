@@ -55,9 +55,22 @@ def party_mix(donor_df):
     )
 
     # Get a compatible song, use it to start the first song in the second half
-    song_index = selects.party_select_song(donor_df, rec_front_half)
+    song_index = None
+    while song_index is None:
+        song_index = selects.party_select_song(donor_df, rec_front_half)
+        if song_index:
+            select_type = "party"
+            break
+        song_index = selects.dj_select_song(donor_df, rec_front_half)
+        if song_index:
+            select_type = "dj"
+            break
+        song_index = selects.basic_select_song(donor_df, rec_front_half)
+        if song_index:
+            select_type = "basic"
+            break
     donor_df, rec_back_half = utils.move_song(
-        donor_df, rec_back_half, song_index, "party"
+        donor_df, rec_back_half, song_index, select_type
     )
 
     # Now fill the remainder of the songs into the two halves
@@ -124,9 +137,23 @@ def setlist_mix(donor_df):
     )
 
     # Get a compatible song, use it to start the first song in the second half
+    song_index = None
+    while song_index is None:
+        song_index = selects.setlist_select_song(donor_df, rec_front_half)
+        if song_index:
+            select_type = "setlist"
+            break
+        song_index = selects.dj_select_song(donor_df, rec_front_half)
+        if song_index:
+            select_type = "dj"
+            break
+        song_index = selects.basic_select_song(donor_df, rec_front_half)
+        if song_index:
+            select_type = "basic"
+            break
     song_index = selects.setlist_select_song(donor_df, rec_front_half)
     donor_df, rec_back_half = utils.move_song(
-        donor_df, rec_back_half, song_index, "setlist"
+        donor_df, rec_back_half, song_index, select_type
     )
 
     # Now fill the remainder of the songs into the two halves
