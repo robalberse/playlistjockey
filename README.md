@@ -1,4 +1,4 @@
-# playlistjockey
+# ![playlistjockey](docs/banner_v1.png)
 Unlock innovative ways to experience playlists.
 
 Currently supporting:
