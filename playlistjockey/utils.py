@@ -70,6 +70,11 @@ def clean_title(string):
 def clean_artist(string):
     """Helper function to remove any aspects of a artist title that may hinder searching for it."""
     string = string.replace("The ", "").strip()
+    if " and the " in string:
+        string = string.split(" and ")[0]
+    if " And The " in string:
+        string = string.split(" And ")[0]
+
     string = clean_title(string)
 
     return string

@@ -7,3 +7,6 @@ __pycache__/
 test.ipynb
 .DS_Store
 playlistjockey/tidal/config.ini
+build/
+dist/
+playlistjockey.egg-info
