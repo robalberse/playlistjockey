@@ -9,11 +9,13 @@ def get_spotify_id(sp, isrc, title, artist):
         "track:{}, artist:{}".format(
             utils.clean_title(title), utils.clean_artist(artist)
         ),
+        "track:" + title,
+        "track:" + utils.clean_title(title),
     ]
     query_no = 0
     result = None
 
-    while query_no != 3:
+    while query_no != 5:
         results = sp.search(queries[query_no])["tracks"]["items"]
         # Break if no results are returned
         if len(results) != 0:
@@ -31,19 +33,24 @@ def get_spotify_id(sp, isrc, title, artist):
 
     if not result:
         query_no = 0
-        title = utils.clean_title(title)
-        artist = utils.clean_artist(artist)
-        while query_no != 3:
+        while query_no != 5:
             results = sp.search(queries[query_no])["tracks"]["items"]
             # Break if no results are returned
             if len(results) != 0:
                 # Go through the results, looking for a matching title and artist
                 for i in results:
-                    result_title = utils.clean_title(i["name"])
-                    result_artist = utils.clean_artist(i["artists"][0]["name"])
+                    result_title = i["name"]
+                    result_artist = i["artists"][0]["name"]
                     if utils.text_similarity(
                         title, result_title
                     ) and utils.text_similarity(artist, result_artist):
+                        result = i["id"]
+                        break
+                    elif utils.text_similarity(
+                        utils.clean_title(title), utils.clean_title(result_title)
+                    ) and utils.text_similarity(
+                        utils.clean_artist(artist), utils.clean_artist(result_artist)
+                    ):
                         result = i["id"]
                         break
             if result:
