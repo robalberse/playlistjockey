@@ -1,9 +1,16 @@
-# ![playlistjockey](docs/banner_v1.png)
+# ![playlistjockey](docs/branding/banner_v1.png)
 Unlock innovative ways to experience playlists.
 
 Currently supporting:
 
-![Spotify](docs/spotify.jpg) ![Tidal](docs/tidal.jpg)
+![Spotify](docs/branding/spotify.jpg) ![Tidal](docs/branding/tidal.jpg)
+
+With the following mixing algorithms:
+
+:control_knobs: `"dj"`: songs with compatible keys, speeds, and energy levels are placed next to each other<br>
+:tada: `"party"`: build the energy levels to a peak at the halfway point, then gradually calm things down<br>
+:guitar: `"setlist"`: kick off with some of the most popular songs, saving lower-energy songs for the halfway point, then build back up to the finale<br>
+:musical_note: `"genre"`: group and smoothly transition through the various genres in your playlist
 
 ### Description
 Since the inception of music players, we've always had 3 methods of playback: shuffle, repeat, and repeat once. Frankly, we can do better.
@@ -46,7 +53,7 @@ playlist_df = sp.get_playlist_features(playist_id)
 
 Next, utilize a `playlistjockey` sorting algorithm to mix your playlist:
 ```python
-sorted_df = pj.sort_playlist(playlist_df, 'dj')
+sorted_df = pj.sort_playlist(playlist_df, "dj")
 ```
 
 Preview the new track order, rerun as many times as you'd like. Once you're ready, push it back to update your playlist:
@@ -61,8 +68,3 @@ When experiencing a playlist that has been sorted by `playlistjockey`, enable to
   - Maximize the **Crossfade** value for dance and pop playlists, or set to around 4 seconds for rock or other genres
   - If you're using Spotify's mobile app, enable **Gapless Playback** to minimize quiet moments while a playlist is playing
 
-### Methodology
-This package sorts the songs in your playlists by applying four essential DJ strategies: harmonic mixing, beat matching, and energy levels.
-  - **Harmonic mixing:** playing songs with compatible keys together
-  - **Beat matching:** playing songs with similar speeds and syncing their beats together
-  - **Energy levels:** playing songs with identical intensity levels
