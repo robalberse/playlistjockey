@@ -1,6 +1,6 @@
 # playlistjockey/__init__.py
 
-"""Modudules exported by this package:
+"""Modules exported by this package:
 
 - `Spotify`: class used to connect and extract songs from Spotify's API
 - `Tidal`: class used to connect and extract songs from Tidal's API
