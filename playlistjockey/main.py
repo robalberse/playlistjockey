@@ -1,3 +1,18 @@
+# playlistjockey/main.py
+
+"""Main module containing the key functions of playlistjockey.
+
+The module contains the following classes and functions:
+
+- `sort_playlist(playlist_df, mix)`: Sorts the songs in a playlist df using a specified mixing algorithm.
+- `Spotify(client_id, client_secret, redirect_uri)`: Class used for pulling and pushing playlists to and from Spotify.
+    - `get_playlist_features(self, playlist_id, genres=False)`: Pull in all required features of songs in a given playlist.
+    - `update_playlist(self, playlist_id, playlist_df)`: Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
+- `Tidal(spotify)`: Class used for pulling and pushing playlists to and from Tidal.
+    - `get_playlist_features(self, playlist_id, genres=False)`: Pull in all required features of songs in a given playlist.
+    - `update_playlist(self, playlist_id, playlist_df)`: Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
+"""
+
 import pandas as pd
 import numpy as np
 import html
@@ -153,8 +168,7 @@ class Tidal:
         """Pull in all required features of songs in a given playlist.
 
         Args:
-            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share,
-            and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
+            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share, and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
 
         Returns:
             playlist_df (pd.DataFrame): DataFrame of all tracks and their features in the inputted playlist. To be used as input into the sort_playlist function.
@@ -200,8 +214,7 @@ class Tidal:
         """Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
 
         Args:
-            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share,
-            and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
+            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share, and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
             playlist_df (pd.DataFrame): DataFrame containing the new tracks and order the playlist will be in. This is intended to be the returned DataFrame from the sort_playlist function.
 
         """

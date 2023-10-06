@@ -1,3 +1,15 @@
+# playlistjockey/mixes.py
+
+"""Module containing mixing algorithms.
+
+The module contains the following classes and functions:
+
+- `dj_mix(donor_df)`: Mixing algorithm that sorts a playlist like a DJ: utilizing compatible keys, bpms, and energy features.
+- `party_mix(donor_df)`: Mixing algorithm that puts the most party appropriate songs in the middle of the playlist.
+- `setlist_mix(donor_df)`: Mixing algorithm that puts the most energetic and popular songs at the beginning and end of the playlist.
+- `genre_mix(donor_df)`: Mixing algorithm that sorts a playlist by grouping genres together.
+"""
+
 import pandas as pd
 
 from playlistjockey import selects, utils

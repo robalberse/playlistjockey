@@ -1,10 +1,23 @@
+# playlistjockey/filters.py
+
+"""Provide the filters used by the various mixing algorithms to identify compatible songs.
+
+The module contains the following functions:
+
+- `artist_filter(donor_df, recipient_df)`: Filter the donor_df for artists that have been recently played.
+- `key_filter(donor_df, recipient_df)`: Filters donor_df for songs that have compatible keys with the last song in recipient_df.
+- `bpm_filter(donor_df, recipient_df)`: Filters donor_df for songs within 10% difference in tempo from the last song in recipient_df, half and double time included.
+- `plus_minus_1_filter(donor_df, recipient_df, column)`: Filters donor_df for 1 value difference in inputted quantitative column from the last song in recipient_df.
+- `equal_filter(donor_df, recipient_df, column)`: Filters donor_df for the same value in inputted quantitative column from the last song in recipient_df.
+"""
+
 import pandas as pd
 
 from collections import Counter
 
 
 def artist_filter(donor_df, recipient_df):
-    """Filter the donor_df for artists that have been previously played. This ensures the same artists aren't being played consecutively."""
+    """Filter the donor_df for artists that have been recently played. This ensures the same artists aren't being played consecutively."""
     # Calculate max artist count to song percentage
     donor_artists = [i for j in donor_df["artists"] for i in j]
     recipient_artists = [i for j in recipient_df["artists"] for i in j]

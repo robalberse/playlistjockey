@@ -1,3 +1,7 @@
+# playlistjockey/spotify/extract.py
+
+"""Function responsible for extracting required features from tracks."""
+
 import pandas as pd
 from playlistjockey import utils
 
