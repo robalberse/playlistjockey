@@ -1,3 +1,18 @@
+# playlistjockey/utils.py
+
+"""Module containing helper functions to assist various functions in `playlistjockey`.
+
+The module contains the following functions:
+- `show_tracks(results, results_array)`: Helper function to ensure the all songs are extracted from a Spotify playlist with more than 100 songs.
+- `show_playlists(results, results_array)`: Helper function to ensure all playlists are extracted from a Spotify user with more than 100 playlists.
+- `spotify_key_to_camelot(spotify_key, spotify_mode)`: Converts Spotipy's key and mode notation to camelot notation.
+- `move_song(donor_df, recipient_df, next_song_index, select_type=None)`: Helper function that moves a song from the donor_df to the recipient_df, given its index.
+- `clean_title(string)`: Helper function to remove any aspects of a song title that may hinder searching for it.
+- `clean_artist(string)`: Helper function to remove any aspects of a artist title that may hinder searching for it.
+- `text_similarity(str_a, str_b)`: Helper function to easily compare song titles or artists to ensure a match.
+- `progress_bar(value, total, prefix="", suffix="", decimals=1, length=100, fill="█")`: Produces a simple progress bar to ensure longer functions are running properly.
+"""
+
 import pandas as pd
 import re
 from difflib import SequenceMatcher as sm
@@ -90,6 +105,7 @@ def text_similarity(str_a, str_b):
 
 
 def progress_bar(value, total, prefix="", suffix="", decimals=1, length=100, fill="█"):
+    """Produces a simple progress bar to ensure longer functions are running properly."""
     percent = ("{0:." + str(decimals) + "f}").format(100 * (value / float(total)))
     filledLength = int(length * value // total)
     bar = fill * filledLength + "-" * (length - filledLength)

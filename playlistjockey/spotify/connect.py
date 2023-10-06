@@ -1,3 +1,7 @@
+# playlistjockey/spotify/connect.py
+
+"""Function responsible for connecting to Spotify's API."""
+
 import os
 
 import spotipy

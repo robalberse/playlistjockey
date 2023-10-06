@@ -1,3 +1,18 @@
+# playlistjockey/main.py
+
+"""Main module containing the key functions of playlistjockey.
+
+The module contains the following classes and functions:
+
+- `sort_playlist(playlist_df, mix)`: Sorts the songs in a playlist df using a specified mixing algorithm.
+- `Spotify(client_id, client_secret, redirect_uri)`: Class used for pulling and pushing playlists to and from Spotify.
+    - `get_playlist_features(self, playlist_id, genres=False)`: Pull in all required features of songs in a given playlist.
+    - `update_playlist(self, playlist_id, playlist_df)`: Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
+- `Tidal(spotify)`: Class used for pulling and pushing playlists to and from Tidal.
+    - `get_playlist_features(self, playlist_id, genres=False)`: Pull in all required features of songs in a given playlist.
+    - `update_playlist(self, playlist_id, playlist_df)`: Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
+"""
+
 import pandas as pd
 import numpy as np
 import html

@@ -1,3 +1,7 @@
+# playlistjockey/tidal/extract.py
+
+"""Functions responsible for identify Tidal songs in Spotify, and extracting required features from tracks."""
+
 from playlistjockey import utils
 
 

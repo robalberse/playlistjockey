@@ -1,3 +1,7 @@
+# playlistjockey/tidal/connect.py
+
+"""Function responsible for connecting to Tidal's API. Creates config.ini file to store Tidal tokens."""
+
 import configparser
 import pkg_resources
 

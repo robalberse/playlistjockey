@@ -1,3 +1,17 @@
+# playlistjockey/select.py
+
+"""Module containing functions that utilize filters.py to select compatible songs.
+
+The module contains the following classes and functions:
+
+- `random_select_song(donor_df)`: Select a random song from the donor_df.
+- `dj_select_song(donor_df, recipient_df)`: Select a compatible DJ song from the donor_df using the last song from the recipient_df.
+- `basic_select_song(donor_df, recipient_df)`: Select a song from the donor_df using the last song from the recipient_df that has at least one compatible feature.
+- `party_select_song(donor_df, recipient_df)`: Select a song from the donor_df using the last song from the recipient_df that has the maximum energy and/or danceability.
+- `setlist_select_song(donor_df, recipient_df)`: Select a song from the donor_df using the last song from the recipient_df that has the minimum energy and/or popularity.
+- `genre_select_song(donor_df, recipient_df)`: Select a song from the donor_df using the last song from the recipient_df that is from a similar genre.
+"""
+
 import pandas as pd
 import random
 
