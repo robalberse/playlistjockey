@@ -20,6 +20,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent"
     ],
-    license="LGPL-3.0-or-later",
+    license="GPL",
     py_modules=["playlistjockey"]
 )
