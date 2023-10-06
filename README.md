@@ -1,9 +1,9 @@
-# ![playlistjockey](docs/branding/banner_v1.png)
+# ![playlistjockey](docs/images/banner_v1.png)
 Unlock innovative ways to experience playlists.
 
 Currently supporting:
 
-![Spotify](docs/branding/spotify.jpg) ![Tidal](docs/branding/tidal.jpg)
+![Spotify](docs/images/spotify.jpg) ![Tidal](docs/images/tidal.jpg)
 
 With the following mixing algorithms:
 
@@ -27,6 +27,12 @@ To utilize this module, you will first need to create a Spotify developer accoun
   3. On the overview page for your app, go to settings
   4. Save your client ID and client secret, and create a redirect URI
 
+Install the package:
+```
+pip install playlistjockey
+```
+
+### Usage
 Import the package:
 ```python
 import playlistjockey as pj
@@ -42,7 +48,7 @@ The following will need to be done when first initializing these streaming platf
   * __Tidal__: Your browser will automatically open a window prompting you to log into your Tidal account
 
 > [!NOTE]
-> If you experience any connection-related errors, first try reinitializing your streaming platform objects.
+> If you experience any connection-related errors, try reinitializing your streaming platform objects.
 
 Once the connections to your streaming platforms are established, you can pull in one of your playlists:
 ```python

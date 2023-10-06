@@ -168,8 +168,7 @@ class Tidal:
         """Pull in all required features of songs in a given playlist.
 
         Args:
-            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share,
-            and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
+            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share, and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
 
         Returns:
             playlist_df (pd.DataFrame): DataFrame of all tracks and their features in the inputted playlist. To be used as input into the sort_playlist function.
@@ -215,8 +214,7 @@ class Tidal:
         """Overwrites the songs and order of the given playlist ID, using the songs in the given playlist DataFrame.
 
         Args:
-            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share,
-            and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
+            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share, and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
             playlist_df (pd.DataFrame): DataFrame containing the new tracks and order the playlist will be in. This is intended to be the returned DataFrame from the sort_playlist function.
 
         """
