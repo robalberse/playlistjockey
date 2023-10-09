@@ -19,6 +19,7 @@ def dj_mix(donor_df):
     """Mixing algorithm that sorts a playlist like a DJ: utilizing compatible keys, bpms, and energy features."""
     # Establish the recipient df that will be the playlist's new order
     recipient_df = pd.DataFrame(columns=donor_df.columns)
+    recipient_df["select_type"] = ""
 
     # Begin by randomly selecting the first song
     song_1_index = selects.random_select_song(donor_df)
@@ -55,6 +56,7 @@ def party_mix(donor_df):
     low level of energy, building to a peak at the halfway point, then gradually lowering the energy back down."""
     # Establish two recipient DataFrames
     rec_front_half = pd.DataFrame(columns=donor_df.columns)
+    rec_front_half["select_type"] = ""
     rec_back_half = rec_front_half.copy()
 
     # Sort the donor_df by energy and danceability
@@ -137,6 +139,7 @@ def setlist_mix(donor_df):
     Starting with high levels of energy, saving the least energetic song for the midpoint, then building the energy back up for the grand finale."""
     # Establish two recipient DataFrames
     rec_front_half = pd.DataFrame(columns=donor_df.columns)
+    rec_front_half["select_type"] = ""
     rec_back_half = rec_front_half.copy()
 
     # Sort the donor_df by energy and popularity
@@ -225,6 +228,7 @@ def genre_mix(donor_df):
 
     # Establish the recipient df that will be the playlist's new order
     recipient_df = pd.DataFrame(columns=donor_df.columns)
+    recipient_df["select_type"] = ""
 
     # Begin by randomly selecting the first song
     song_1_index = selects.random_select_song(donor_df)
