@@ -1,6 +1,8 @@
 # ![playlistjockey](docs/images/banner_v1.png)
 Unlock innovative ways to experience playlists.
 
+[![pypi](https://img.shields.io/badge/pypi-v1.0.0-%23008080?link=https%3A%2F%2Fpypi.org%2Fproject%2Fplaylistjockey%2F)](https://pypi.org/project/playlistjockey/)
+
 Currently supporting:
 
 ![Spotify](docs/images/spotify.jpg) ![Tidal](docs/images/tidal.jpg)
