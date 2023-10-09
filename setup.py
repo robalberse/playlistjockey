@@ -5,7 +5,7 @@ with open("README.md", "r") as readme:
 
 setuptools.setup(
     name="playlistjockey",
-    version="1.0.0",
+    version="0.9.3",
     author="Robby Alberse",
     author_email="robalberse@gmail.com",
     description="Unlock innovative ways to experience playlists.",
@@ -17,10 +17,10 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(),
     install_requires=[
-        "pandas>=2.1.1",
-        "scikit-learn>=1.3.1",
-        "spotipy>=2.23.0",
-        "tidalapi>=0.7.3"
+        "pandas>=2.1",
+        "scikit-learn>=1.3",
+        "spotipy>=2.23",
+        "tidalapi>=0.7"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
