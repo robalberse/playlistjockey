@@ -5,7 +5,7 @@ with open("README.md", "r") as readme:
 
 setuptools.setup(
     name="playlistjockey",
-    version="0.9.4",
+    version="1.0.0",
     author="Robby Alberse",
     author_email="robalberse@gmail.com",
     description="Unlock innovative ways to experience playlists.",
@@ -26,6 +26,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent"
     ],
-    license="GPL",
-    py_modules=["playlistjockey"]
+    license="GPL"
 )
