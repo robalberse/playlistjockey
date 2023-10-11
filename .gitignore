@@ -1,0 +1,13 @@
+.pylint.d/
+__pycache__/
+.cache-robalberse
+.ipynb_checkpoints/
+.song_ids.db-journal/
+.cache
+test.ipynb
+.DS_Store
+playlistjockey/tidal/config.ini
+build/
+dist/
+playlistjockey.egg-info
+site/

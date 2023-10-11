@@ -1,0 +1,14 @@
+site_name: playlistjockey Docs
+
+theme:
+  name: material
+  palette:
+    primary: teal
+    accent: amber
+
+plugins:
+  - mkdocstrings
+
+nav:
+  - Home: index.md
+  - Reference: reference.md
