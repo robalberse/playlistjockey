@@ -168,11 +168,15 @@ class Tidal:
         """Pull in all required features of songs in a given playlist.
 
         Args:
-            playlist_id (str): Unique Tidal playlist ID. This can be acquired by selecting a playlist, selecting the "copy link to playlist" option under share, and removing everything before the final forward slash. Example playlist ID format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.
+            playlist_id (str): Unique Tidal playlist ID or shared link. This can be acquired by selecting the "copy link to playlist" option under share.
 
         Returns:
             playlist_df (pd.DataFrame): DataFrame of all tracks and their features in the inputted playlist. To be used as input into the sort_playlist function.
         """
+        # If playlist_id is a shared link, strip out the playlist id
+        if playlist_id[:6] == 'https:':
+            playlist_id = playlist_id.split('/')[5]
+
         # Pull in the playlist tracks
         playlist = self.td.playlist(playlist_id)
         tracks = playlist.tracks()

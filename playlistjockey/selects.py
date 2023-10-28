@@ -84,6 +84,7 @@ def party_select_song(donor_df, recipient_df):
 def setlist_select_song(donor_df, recipient_df):
     """Select a song from the donor_df using the last song from the recipient_df that has the minimum energy and/or popularity."""
     # Filter for songs with compatible energy and popularity
+    donor_df = filters.artist_filter(donor_df, recipient_df)
     donor_df = filters.plus_minus_1_filter(donor_df, recipient_df, "energy")
     donor_df = filters.plus_minus_1_filter(donor_df, recipient_df, "popularity")
 
