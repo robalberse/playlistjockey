@@ -24,6 +24,20 @@ from playlistjockey.spotify import connect as sp_connect, extract as sp_extract
 from playlistjockey.tidal import connect as td_connect, extract as td_extract
 
 
+def _get_mix(mix):
+    """Helper function to define which mixing technique to use."""
+    if mix == "dj":
+        mix_algorhythm = mixes.dj_mix
+    elif mix == "party":
+        mix_algorhythm = mixes.party_mix
+    elif mix == "setlist":
+        mix_algorhythm = mixes.setlist_mix
+    elif mix == "genre":
+        mix_algorhythm = mixes.genre_mix
+
+    return mix_algorhythm
+
+
 def sort_playlist(playlist_df, mix):
     """Sorts the songs in a playlist df using a specified mixing algorithm.
 
@@ -34,18 +48,67 @@ def sort_playlist(playlist_df, mix):
     Returns:
         df (pd.DataFrame): DataFrame with the updated sorting of songs.
     """
-    if mix == "dj":
-        mix_algorhythm = mixes.dj_mix
-    elif mix == "party":
-        mix_algorhythm = mixes.party_mix
-    elif mix == "setlist":
-        mix_algorhythm = mixes.setlist_mix
-    elif mix == "genre":
-        mix_algorhythm = mixes.genre_mix
+    # Identify which mix algorhythm to utilize
+    mix_algorhythm = _get_mix(mix)
 
+    # Apply the mix and return
     df = mix_algorhythm(playlist_df)
 
     return df
+
+
+def optimal_sort_playlist(playlist_df, mix, n=None):
+    """Sort the songs in a playlist df many times using a specified mixing algorithm to find an optimal order.
+
+    Args:
+        playlist_df (pd.DataFrame): DataFrame containing songs with required columns.
+        mix (str): String identifying which mixing algorithm you would like to use to sort the playlist. Options so far include "dj", "party", "setlist", and "genre".
+        n (int): Specifies how many sorting iterations you want to run. Default is the number of songs in the supplied playlist_df.
+
+    Returns:
+        df (pd.DataFrame): DataFrame with the updated sorting of songs.
+    """
+    # Call the mix algorhythm once to get the best select type
+    _get_mix(mix)(playlist_df)
+    best_select = _get_mix(mix).select_order[0][1]
+
+    # If not explicitly inputted, set iterations to song count
+    if not n:
+        n = len(playlist_df)
+
+    # Sort the playlist n times, caputring how many best and random selects are made
+    mix_store = []
+    for i in range(n):
+        utils.progress_bar(
+            i + 1,
+            n,
+            prefix="Running iterations of {} algorhythm:".format(mix),
+        )
+        df = sort_playlist(playlist_df, mix)
+        n_best = len(df[df["select_type"] == best_select])
+        n_random = len(df[df["select_type"] == "random"])
+        mix_peformance = {
+            "n_best": n_best,
+            "n_random": n_random,
+            "diff": n_best - n_random,
+            "df": df,
+        }
+        mix_store.append(mix_peformance)
+    results = pd.DataFrame(mix_store)
+
+    # Sort the results to get the optimal song order
+    results = results.sort_values(by="diff", ascending=False)
+
+    # Grab the best sorted df and return
+    best_sort = results.head(1)
+    sorted_df = best_sort["df"].item()
+    print(
+        "\nMixing optimized, found iteration with {} {} and {} random song transitions.".format(
+            best_sort["n_best"].item(), best_select, best_sort["n_random"].item()
+        )
+    )
+
+    return sorted_df
 
 
 class Spotify:
@@ -174,8 +237,8 @@ class Tidal:
             playlist_df (pd.DataFrame): DataFrame of all tracks and their features in the inputted playlist. To be used as input into the sort_playlist function.
         """
         # If playlist_id is a shared link, strip out the playlist id
-        if playlist_id[:6] == 'https:':
-            playlist_id = playlist_id.split('/')[5]
+        if playlist_id[:6] == "https:":
+            playlist_id = playlist_id.split("/")[5]
 
         # Pull in the playlist tracks
         playlist = self.td.playlist(playlist_id)
@@ -222,6 +285,10 @@ class Tidal:
             playlist_df (pd.DataFrame): DataFrame containing the new tracks and order the playlist will be in. This is intended to be the returned DataFrame from the sort_playlist function.
 
         """
+        # If playlist_id is a shared link, strip out the playlist id
+        if playlist_id[:6] == "https:":
+            playlist_id = playlist_id.split("/")[5]
+
         # Get playlist object
         playlist = self.td.playlist(playlist_id)
 

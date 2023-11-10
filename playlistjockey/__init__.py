@@ -7,4 +7,4 @@
 - `sort_playlist`: function used to call mixing algorithms
 """
 
-from .main import Spotify, Tidal, sort_playlist
+from .main import Spotify, Tidal, sort_playlist, optimal_sort_playlist

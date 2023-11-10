@@ -72,7 +72,7 @@ def move_song(donor_df, recipient_df, next_song_index, select_type=None):
     # Establish the select_type column in the donor df
     if "select_type" not in donor_df:
         donor_df["select_type"] = ""
-    
+
     # Copy the song over to the recipient_df, and drop it from the donor_df
     if select_type:
         donor_df.at[next_song_index, "select_type"] = select_type

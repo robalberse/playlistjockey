@@ -27,7 +27,7 @@ def dj_mix(donor_df):
     )
 
     # Define the order in which to select songs
-    select_order = [
+    dj_mix.select_order = [
         [selects.dj_select_song, "dj"],
         [selects.basic_select_song, "basic"],
         [selects.random_select_song, "random"],
@@ -35,7 +35,7 @@ def dj_mix(donor_df):
 
     # Fill the rest of the playlist
     while len(donor_df) != 0:
-        for select, select_type in select_order:
+        for select, select_type in dj_mix.select_order:
             if select_type == "random":
                 next_song_index = select(donor_df)
             else:
@@ -52,7 +52,8 @@ def dj_mix(donor_df):
 
 def party_mix(donor_df):
     """Mixing algorithm that puts the most party appropriate songs in the middle of the playlist. This allows your playlist to compliment the typical flow of a party: starting at a
-    low level of energy, building to a peak at the halfway point, then gradually lowering the energy back down."""
+    low level of energy, building to a peak at the halfway point, then gradually lowering the energy back down.
+    """
     # Establish two recipient DataFrames
     rec_front_half = pd.DataFrame(columns=donor_df.columns)
     rec_back_half = rec_front_half.copy()
@@ -86,7 +87,7 @@ def party_mix(donor_df):
     )
 
     # Now fill the remainder of the songs into the two halves
-    select_order = [
+    party_mix.select_order = [
         [selects.party_select_song, "party"],
         [selects.dj_select_song, "dj"],
         [selects.basic_select_song, "basic"],
@@ -100,7 +101,7 @@ def party_mix(donor_df):
         if (i % 2) == 0:
             recipient_df = rec_back_half
 
-        for select, select_type in select_order:
+        for select, select_type in party_mix.select_order:
             if select_type == "random":
                 next_song_index = select(donor_df)
             else:
@@ -134,7 +135,8 @@ def party_mix(donor_df):
 
 def setlist_mix(donor_df):
     """Mixing algorithm that puts the most energetic and popular songs at the beginning and end of the playlist. This allows your playlist to compliment the typical flow of a concert:
-    Starting with high levels of energy, saving the least energetic song for the midpoint, then building the energy back up for the grand finale."""
+    Starting with high levels of energy, saving the least energetic song for the midpoint, then building the energy back up for the grand finale.
+    """
     # Establish two recipient DataFrames
     rec_front_half = pd.DataFrame(columns=donor_df.columns)
     rec_back_half = rec_front_half.copy()
@@ -168,7 +170,7 @@ def setlist_mix(donor_df):
     )
 
     # Now fill the remainder of the songs into the two halves
-    select_order = [
+    setlist_mix.select_order = [
         [selects.setlist_select_song, "setlist"],
         [selects.dj_select_song, "dj"],
         [selects.basic_select_song, "basic"],
@@ -182,7 +184,7 @@ def setlist_mix(donor_df):
         if (i % 2) == 0:
             recipient_df = rec_back_half
 
-        for select, select_type in select_order:
+        for select, select_type in setlist_mix.select_order:
             if select_type == "random":
                 next_song_index = select(donor_df)
             else:
@@ -233,7 +235,7 @@ def genre_mix(donor_df):
     )
 
     # Define the order in which to select songs
-    select_order = [
+    genre_mix.select_order = [
         [selects.genre_select_song, "genre"],
         [selects.basic_select_song, "basic"],
         [selects.random_select_song, "random"],
@@ -241,7 +243,7 @@ def genre_mix(donor_df):
 
     # Fill the rest of the playlist
     while len(donor_df) != 0:
-        for select, select_type in select_order:
+        for select, select_type in genre_mix.select_order:
             if select_type == "random":
                 next_song_index = select(donor_df)
             else:
