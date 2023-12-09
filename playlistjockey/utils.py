@@ -84,11 +84,20 @@ def move_song(donor_df, recipient_df, next_song_index, select_type=None):
 
 def clean_title(string):
     """Helper function to remove any aspects of a song title that may hinder searching for it."""
-    return re.split("[-:&/.•[(]+", string)[0].strip()
+    # Grab text before brackets
+    no_special = re.split("[-:&/.•[(]+", string)
+    if len(no_special) > 1:
+        string = no_special[0].strip()
+
+    # Drop apostrophes, as they specifically cause issues with search queries
+    string = string.replace("'", "")
+
+    return string
 
 
 def clean_artist(string):
     """Helper function to remove any aspects of a artist title that may hinder searching for it."""
+
     string = string.replace("The ", "").strip()
     if " and the " in string:
         string = string.split(" and ")[0]
@@ -102,7 +111,7 @@ def clean_artist(string):
 
 def text_similarity(str_a, str_b):
     """Helper function to easily compare song titles or artists to ensure a match."""
-    similarity = sm(None, str_a, str_b).ratio()
+    similarity = sm(None, str_a.lower(), str_b.lower()).ratio()
     if similarity >= 0.8:
         return True
     else:

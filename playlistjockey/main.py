@@ -48,11 +48,14 @@ def sort_playlist(playlist_df, mix):
     Returns:
         df (pd.DataFrame): DataFrame with the updated sorting of songs.
     """
+    # Establish a copy of playlist_df
+    df = playlist_df.copy()
+
     # Identify which mix algorhythm to utilize
     mix_algorhythm = _get_mix(mix)
 
     # Apply the mix and return
-    df = mix_algorhythm(playlist_df)
+    df = mix_algorhythm(df)
 
     return df
 
@@ -242,14 +245,25 @@ class Tidal:
 
         # Pull in the playlist tracks
         playlist = self.td.playlist(playlist_id)
-        tracks = playlist.tracks()
+        media = playlist.tracks()
+
+        # If there are videos, pull them in instead using the items func
+        if playlist.num_videos > 0:
+            # Add media 100 items at a time
+            q = len(media) // 100
+            media = []
+
+            offset = 0
+            for i in range(q + 1):
+                media.extend(playlist.items(offset=offset))
+                offset += 100
 
         # Now iterate through each song to get required features
         feature_store = []
-        for i in tracks:
+        for i in media:
             utils.progress_bar(
                 len(feature_store) + 1,
-                len(tracks),
+                len(media),
                 prefix="Loading songs from {}:".format(playlist.name),
             )
             feature_store.append(
@@ -311,7 +325,8 @@ class Tidal:
             playlist.add(list(playlist_df["track_id"].head(100)))
             playlist_df = playlist_df.tail(len(playlist_df) - 100)
 
-        playlist.add(list(playlist_df["track_id"].head(rem)))
+        if rem > 0:
+            playlist.add(list(playlist_df["track_id"].head(rem)))
 
         # Update playlist description
         description = html.unescape(playlist.description)
