@@ -38,7 +38,7 @@ def _get_mix(mix):
     return mix_algorhythm
 
 
-def sort_playlist(playlist_df, mix, first_track=None):
+def sort_playlist(playlist_df, mix):
     """Sorts the songs in a playlist df using a specified mixing algorithm.
 
     Args:
@@ -55,7 +55,7 @@ def sort_playlist(playlist_df, mix, first_track=None):
     mix_algorhythm = _get_mix(mix)
 
     # Apply the mix and return
-    df = mix_algorhythm(df, first_track)
+    df = mix_algorhythm(df)
 
     return df
 

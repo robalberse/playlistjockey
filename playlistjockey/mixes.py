@@ -15,15 +15,13 @@ import pandas as pd
 from playlistjockey import selects, utils
 
 
-def dj_mix(donor_df, first_track=None):
+def dj_mix(donor_df):
     """Mixing algorithm that sorts a playlist like a DJ: utilizing compatible keys, bpms, and energy features."""
     # Establish the recipient df that will be the playlist's new order
     recipient_df = pd.DataFrame(columns=donor_df.columns)
 
-    # Select the first song randomly if not specified
+    # Begin by randomly selecting the first song
     song_1_index = selects.random_select_song(donor_df)
-    if first_track:
-        song_1_index = selects.select_specific_song(donor_df, first_track)
     donor_df, recipient_df = utils.move_song(
         donor_df, recipient_df, song_1_index, "random"
     )
