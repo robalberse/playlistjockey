@@ -15,7 +15,7 @@ The module contains the following classes and functions:
 import pandas as pd
 import random
 
-from playlistjockey import filters
+from playlistjockey import filters, utils
 
 
 def random_select_song(donor_df):
@@ -25,6 +25,21 @@ def random_select_song(donor_df):
     except:
         next_song_index = None
     return next_song_index
+
+
+def select_specific_song(donor_df, title):
+    """Select a specific song by its title."""
+    # Establish output
+    out = None
+
+    # Got through each title to try and find a match
+    for i in donor_df["title"]:
+        if utils.text_similarity(i, title):
+            out = donor_df.loc[donor_df["title"] == i].index[0]
+        elif utils.text_similarity(utils.clean_title(i), utils.clean_title(title)):
+            out = donor_df.loc[donor_df["title"] == i].index[0]
+
+    return out
 
 
 def dj_select_song(donor_df, recipient_df):
