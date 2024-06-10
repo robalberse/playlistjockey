@@ -56,7 +56,7 @@ Once the connections to your streaming platforms are established, you can pull i
 ```python
 playlist_id = 'https://open.spotify.com/playlist/7kIvZ3p234OPRRgibzNoQS?si=9d743a7caec143b9'
 
-playlist_df = sp.get_playlist_features(playist_id)
+playlist_df = sp.get_playlist_features(playlist_id)
 ``` 
 
 Next, utilize a `playlistjockey` sorting algorithm to mix your playlist:
