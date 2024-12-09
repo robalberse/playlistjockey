@@ -1,3 +1,6 @@
+# **** THIS PROJECT IS NOW DEPRECATED ****
+On November 27th, 2024, Spotify [announced](https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api), without warning, that it had removed access to the audio features and analysis endpoints from its API. As a result, this repo is now unusable, as many of its sorting algorithms rely on key and BPM data.
+
 # ![playlistjockey](docs/images/banner_v1.png)
 Unlock innovative ways to experience playlists.
 
